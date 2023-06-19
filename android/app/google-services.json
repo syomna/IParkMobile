@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "46243115381",
+    "firebase_url": "https://parking-system-eaece-default-rtdb.firebaseio.com",
+    "project_id": "parking-system-eaece",
+    "storage_bucket": "parking-system-eaece.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46243115381:android:275a0017b4080b116b233c",
+        "android_client_info": {
+          "package_name": "com.iparkmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46243115381-vifedjfkvlqusatnckm2g60cqo7fiiq2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN-DWe1OEK-2uKuBxrlOKTgpqrNCmb0M8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "46243115381-vifedjfkvlqusatnckm2g60cqo7fiiq2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
