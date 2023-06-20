@@ -5,7 +5,7 @@ import {LoginScreen} from './src/screens/LoginScreen';
 import ReservationScreen from './src/screens/ReservationScreen';
 import ResultsScreen from './src/screens/ResultsScreen';
 import {kRoutes} from './src/utils/routes';
-
+import React from 'react';
 const Stack = createStackNavigator();
 
 function App() {
