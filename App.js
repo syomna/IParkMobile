@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from './src/screens/HomeScreen';
@@ -6,11 +7,14 @@ import ReservationScreen from './src/screens/ReservationScreen';
 import ResultsScreen from './src/screens/ResultsScreen';
 import {kRoutes} from './src/utils/routes';
 import React from 'react';
+import store from './src/redux/store';
+import { Provider } from 'react-redux';
 const Stack = createStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name={kRoutes.home}
@@ -34,6 +38,7 @@ function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 

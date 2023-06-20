@@ -8,9 +8,9 @@ export default function HomeScreen() {
     <View style={styles.view}>
       <Text style={styles.text}>Home Screen</Text>
       <Button
-        title="navigate to login"
+        title="navigate to Map"
         onPress={() => {
-          navigation.navigate(kRoutes.login);
+          navigation.navigate(kRoutes.results);
         }}
       />
     </View>
