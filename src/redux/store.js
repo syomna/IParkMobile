@@ -4,7 +4,7 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 // import selectedGarageSlice from '../slices/selectedGarage';
 // import signUpData from '../slices/signupSlice';
 // import loginData from '../slices/loginSlice';
-// import reservationSlice from '../slices/reservationSlice';
+import reservationSlice from './slices/ReservationSlice';
 
 const rootReducer = combineReducers({
   //   dateGeocode: dateGeocodeReducer,
@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   //   selectedGarage: selectedGarageSlice,
   //   signupReducer: signUpData,
   //   loginReducer: loginData,
-  //   reservation: reservationSlice,
+  reservation: reservationSlice,
 });
 
 const store = configureStore({reducer: rootReducer});
