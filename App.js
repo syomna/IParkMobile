@@ -6,34 +6,37 @@ import ReservationScreen from './src/screens/ReservationScreen';
 import ResultsScreen from './src/screens/ResultsScreen';
 import {kRoutes} from './src/utils/routes';
 import React from 'react';
+import {Provider} from 'react-redux';
+import store from './src/redux/store';
 const Stack = createStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name={kRoutes.home}
-          component={HomeScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name={kRoutes.login}
-          component={LoginScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name={kRoutes.results}
-          component={ResultsScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name={kRoutes.reservation}
-          component={ReservationScreen}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name={kRoutes.home}
+            component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name={kRoutes.login}
+            component={LoginScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name={kRoutes.results}
+            component={ResultsScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name={kRoutes.reservation}
+            component={ReservationScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
