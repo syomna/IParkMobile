@@ -60,6 +60,7 @@ export default function ReservationScreen() {
           fee={5}
           finalPrice={55}
           isLogged={id ? true : false}
+          uid={id}
         />
       </View>
     </StripeProvider>
