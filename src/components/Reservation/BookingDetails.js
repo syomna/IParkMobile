@@ -20,6 +20,7 @@ export default function BookingDetails({
   fee,
   finalPrice,
   isLogged,
+  uid,
 }) {
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [isDialogVisible, setDialogVisible] = useState(false);
@@ -104,7 +105,7 @@ export default function BookingDetails({
               initializePaymentSheet().then(() => {
                 if (!loading) {
                   presentPaymentSheet().then(() => {
-                    dispatch(reserveGarage(0, 20));
+                    dispatch(reserveGarage(0, uid, 20));
                     navigate.reset({
                       index: 0,
                       routes: [{name: kRoutes.home}],
@@ -173,7 +174,7 @@ export default function BookingDetails({
                 underlayColor="#d1d1d1"
                 onPress={() => {
                   hideDialog();
-                  dispatch(reserveGarage(0, 20));
+                  dispatch(reserveGarage(0, uid, 20));
                   navigate.reset({
                     index: 0,
                     routes: [{name: kRoutes.home}],
