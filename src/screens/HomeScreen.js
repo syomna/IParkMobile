@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 import {kRoutes} from '../utils/routes';
@@ -10,7 +11,7 @@ export default function HomeScreen() {
       <Button
         title="navigate to login"
         onPress={() => {
-          navigation.navigate(kRoutes.login);
+          navigation.navigate(kRoutes.results);
         }}
       />
     </View>
