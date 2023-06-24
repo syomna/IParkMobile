@@ -6,9 +6,18 @@ import {StripeProvider} from '@stripe/stripe-react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {ReservationStyle} from '../styles/ReservationsStyle';
 import {getId, logout} from '../redux/slices/AuthSlice';
+import {
+  kCalculatePrice,
+  kFormatDate,
+  kFormatDuration,
+} from '../utils/Constants';
 export default function ReservationScreen() {
   const navigation = useNavigation();
   const {id} = useSelector(state => state.authSlice);
+  const {garage} = useSelector(state => state.selectedGarage);
+  const {startTime, endTime, duration} = useSelector(
+    state => state.dateGeocode,
+  );
   const dispatch = useDispatch();
 
   const logoutComponent = () => {
@@ -52,13 +61,14 @@ export default function ReservationScreen() {
     <StripeProvider publishableKey="pk_test_51KXpcGEcv5DBpHLpgsfICVjB9HnKnXFnzLI8QF3uYbiubSMnycqHe2regSgbh037URqiRyH8uKzN7uuaAfBLpfhJ00SBKPhAR7">
       <View style={styles.body}>
         <BookingDetails
-          title="Parking on Abbey Street, SE1"
-          parkingFrom="26 jun at 09:00"
-          parkingUntil="26 jun at 11:00"
-          duration="2 hr"
-          pricePerHour={25}
+          title={garage.garageName}
+          address={garage.address}
+          parkingFrom={kFormatDate(startTime)}
+          parkingUntil={kFormatDate(endTime)}
+          duration={kFormatDuration(duration)}
+          pricePerHour={garage.pricePerHour}
           fee={5}
-          finalPrice={55}
+          finalPrice={kCalculatePrice(duration, garage.pricePerHour, 5)}
           isLogged={id ? true : false}
           uid={id}
         />
