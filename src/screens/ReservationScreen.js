@@ -53,8 +53,8 @@ export default function ReservationScreen() {
       <View style={styles.body}>
         <BookingDetails
           title="Parking on Abbey Street, SE1"
-          parkingFrom="21 jun at 09:00"
-          parkingUntil="21 jun at 11:00"
+          parkingFrom="26 jun at 09:00"
+          parkingUntil="26 jun at 11:00"
           duration="2 hr"
           pricePerHour={25}
           fee={5}

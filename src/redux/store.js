@@ -7,11 +7,12 @@ import selectedGarageSlice from './slices/selectedGarage';
 // import signUpData from '../slices/signupSlice';
 // import loginData from '../slices/loginSlice';
 import reservationSlice from './slices/ReservationSlice';
+import dateGeocodeSlice from './slices/dateGeocodeSlice';
 
 const rootReducer = combineReducers({
-  //   dateGeocode: dateGeocodeReducer,
-    garageSpaces: garageSpacesSlice,
-    selectedGarage: selectedGarageSlice,
+  dateGeocode: dateGeocodeSlice,
+  garageSpaces: garageSpacesSlice,
+  selectedGarage: selectedGarageSlice,
   //   signupReducer: signUpData,
   //   loginReducer: loginData,
   authSlice: AuthSlice,
