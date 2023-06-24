@@ -6,6 +6,7 @@ import {kRoutes} from '../../utils/routes';
 
 export default function AuthCard() {
   const navigate = useNavigation();
+
   return (
     <View style={ReservationStyle.authCard}>
       <Text style={ReservationStyle.cardTitle}>Personal details</Text>
@@ -23,9 +24,13 @@ export default function AuthCard() {
         <Text style={ReservationStyle.dividerTitle}>Or</Text>
         <View style={ReservationStyle.horizontalLine} />
       </View>
+
       <View style={ReservationStyle.rowCenter}>
         <Text>Don't have an account?</Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigate.navigate(kRoutes.signup);
+          }}>
           <Text style={ReservationStyle.authButtonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>

@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
+import AuthSlice from './slices/AuthSlice';
 // import dateGeocodeReducer from '../slices/geoCodeSlice';
 import garageSpacesSlice from './slices/garageSpacesSlice';
 import selectedGarageSlice from './slices/selectedGarage';

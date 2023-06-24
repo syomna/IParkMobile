@@ -171,4 +171,10 @@ export const ReservationStyle = StyleSheet.create({
   },
   disabledPaymentCard: {backgroundColor: '#e0e0e0'},
   disabledPaymentLabel: {color: '#a0a0a0'},
+  logout: {
+    color: purpleColor,
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginRight: mainSpace + 2,
+  },
 });
