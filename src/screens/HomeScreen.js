@@ -1,7 +1,10 @@
 /* eslint-disable prettier/prettier */
+import { useNavigation } from '@react-navigation/core';
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
+import { kRoutes } from '../utils/routes';
 export default function HomeScreen() {
+  const navigation = useNavigation();
   return (
     <View style={styles.view}>
       <Text style={styles.text}>Home Screen</Text>
