@@ -14,6 +14,7 @@ const rootReducer = combineReducers({
     selectedGarage: selectedGarageSlice,
   //   signupReducer: signUpData,
   //   loginReducer: loginData,
+  authSlice: AuthSlice,
   reservation: reservationSlice,
 });
 
