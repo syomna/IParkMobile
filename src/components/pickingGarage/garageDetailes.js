@@ -21,7 +21,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
 import {Paragraph} from 'react-native-paper';
-import {kCalculatePrice} from '../../utils/Constants';
+import {kCalculatePrice, kFormatDuration} from '../../utils/Constants';
 import {Tab} from '@rneui/themed';
 import svg1 from '../../assets/imgs/how_to_park_step_1.png';
 import svg2 from '../../assets/imgs/how_to_park_step_2.png';
@@ -37,7 +37,8 @@ export const bottomSheetRefProps = {
 
 const GaragDetails = React.forwardRef(({id}, ref) => {
   const dispatch = useDispatch();
-  const {data} = useSelector(state => state.garageSpaces);
+  const { data } = useSelector(state => state.garageSpaces);
+  const {duration} = useSelector(state => state.dateGeocode);
   const [garage, setGarage] = useState([]);
   // const { duration } = useSelector((state) => state.dateGeocode);
   const translateY = useSharedValue(0);
@@ -83,22 +84,25 @@ const GaragDetails = React.forwardRef(({id}, ref) => {
       </View>
     );
   }
+  // console.log(` details ${garage[0].garage.address}`);
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={[styles.bottomSheetContainer, reStyleBottomSheet]}>
         <View style={styles.line} />
         <View style={{justifyContent: 'space-between'}}>
           <Text style={{color: '#000', fontSize: 18}}>
-            {garage[0].garage['name']}
+            {garage[0].garage.garageName}
           </Text>
         </View>
+        <Paragraph>
+          <Text style={{fontSize: 14}}>{garage[0].garage.address}</Text>
+        </Paragraph>
         <Paragraph>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               {/* <Stars ></Stars> */}
               <Text>
-                {garage[0].garage['reviews'] &&
-                  garage[0].garage['reviews'].length}
+                {garage[0].garage.reviews && garage[0].garage.reviews.length}
               </Text>
             </View>
           </View>
@@ -115,11 +119,9 @@ const GaragDetails = React.forwardRef(({id}, ref) => {
                 paddingVertical: 5,
               }}>
               <Text style={{fontWeight: '600', color: '#000'}}>
-                4h
+                {kFormatDuration(duration)}
               </Text>
-              <Text>
-                Total duration
-              </Text>
+              <Text>Total duration</Text>
             </View>
             <View
               style={{
@@ -130,15 +132,13 @@ const GaragDetails = React.forwardRef(({id}, ref) => {
                 paddingVertical: 5,
               }}>
               <Text style={{fontWeight: '600', color: '#000'}}>
-                {garage[0].garage['pricePerHour'] * 4}
+                {kCalculatePrice(duration, garage[0].garage.pricePerHour , 5)}
               </Text>
               <Text>Parking fee</Text>
             </View>
             <View style={{flex: 1, alignItems: 'center', paddingVertical: 5}}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{fontWeight: '600', color: '#000'}}>
-                  2 mins
-                </Text>
+                <Text style={{fontWeight: '600', color: '#000'}}>2 mins</Text>
               </View>
               <Text>To destination</Text>
             </View>
@@ -166,11 +166,11 @@ const GaragDetails = React.forwardRef(({id}, ref) => {
               marginVertical: 10,
             }}>
             <Image
-              source={{uri: garage[0].garage['images'][0]}}
+              source={{uri: garage[0].garage.imagesURL[0]}}
               style={styles.image}
             />
             <Image
-              source={{uri: garage[0].garage['images'][1]}}
+              source={{uri: garage[0].garage.imagesURL[1]}}
               style={styles.image}
             />
           </View>
@@ -217,7 +217,7 @@ const GaragDetails = React.forwardRef(({id}, ref) => {
             // marginVertical: 10,
           }}
           onPress={() => {
-            const garageObj = garage;
+            const garageObj = garage[0].garage;
             const price = kCalculatePrice(
               {days: 0, hours: 4, minutes: 0},
               garage[0].garage.pricePerHour,

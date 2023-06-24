@@ -13,6 +13,7 @@ import {reserveGarage} from '../../redux/slices/ReservationSlice';
 
 export default function BookingDetails({
   title,
+  address,
   parkingFrom,
   parkingUntil,
   duration,
@@ -65,7 +66,7 @@ export default function BookingDetails({
         <View style={ReservationStyle.card}>
           <View style={ReservationStyle.infoSection}>
             <Text style={ReservationStyle.title}>{title}</Text>
-            <Text style={ReservationStyle.subtitle}>Abbey Street</Text>
+            <Text style={ReservationStyle.subtitle}>{address}</Text>
           </View>
           <View style={ReservationStyle.row}>
             <View>
@@ -130,7 +131,7 @@ export default function BookingDetails({
                 ReservationStyle.buttonText,
                 !isLogged ? ReservationStyle.disabledPaymentLabel : null,
               ]}>
-              EGP 55 - Reserve
+              EGP {finalPrice} - Reserve
             </Text>
           </TouchableOpacity>
         </View>

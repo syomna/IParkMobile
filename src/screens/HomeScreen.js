@@ -31,22 +31,22 @@ const HomeScreen = ({navigation}) => {
     longitude: null,
   });
 
-  // useEffect(() => {
-  //   if (isFocused) {
-  //     Geolocation.getCurrentPosition(
-  //       position => {
-  //         setCurrentLocation({
-  //           latitude: position.coords.latitude,
-  //           longitude: position.coords.longitude,
-  //         });
-  //       },
-  //       error => {
-  //         console.log('Error getting current location:', error);
-  //       },
-  //       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-  //     );
-  //   }
-  // }, [isFocused]);
+  useEffect(() => {
+    if (isFocused) {
+      Geolocation.getCurrentPosition(
+        position => {
+          setCurrentLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        error => {
+          console.log('Error getting current location:', error);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    }
+  }, [isFocused]);
 
   const dispatch = useDispatch();
 
@@ -113,7 +113,9 @@ const HomeScreen = ({navigation}) => {
           placeholder="Where are you going?"
           fetchDetails={true}
           onPress={(data, details = null) => {
+            console.log(`details ${details.formatted_address}`);
             const geocode = {
+              address: details.formatted_address,
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             };
