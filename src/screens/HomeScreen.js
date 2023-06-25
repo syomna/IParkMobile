@@ -1,8 +1,10 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-shadow */
 
 import {React, useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert, Image} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import moment from 'moment';
@@ -19,27 +21,28 @@ import {
   setDuration,
 } from '../redux/slices/dateGeocodeSlice';
 import {useIsFocused} from '@react-navigation/native';
-import checkLocationPermission from '../utils/closestGarage'
-import { PermissionsAndroid} from 'react-native';
+// import checkLocationPermission from '../utils/closestGarage';
+import {PermissionsAndroid} from 'react-native';
 // import Geolocation from 'react-native-geolocation-service';
-import Permissions from 'react-native-permissions';
-import MapView, { Marker } from 'react-native-maps';
+// import Permissions from 'react-native-permissions';
+import MapView, {Marker} from 'react-native-maps';
+// import {kFormatDate} from '../utils/Constants';
 const HomeScreen = ({navigation}) => {
   const startDateTime = useSelector(state => state.dateGeocode.startTime);
   const endDateTime = useSelector(state => state.dateGeocode.endTime);
   const [startOpen, setStartOpen] = useState(false);
   const [endopen, setendOpen] = useState(false);
   const [locationChosen, setLocationChosen] = useState(false);
+  const [endDate, setendDateTime] = useState(new Date());
   const isFocused = useIsFocused();
   // const { geocode } = useSelector(state=>state.dateGeocode)
-  const [location, setLocation] = useState(false)
+  const [location, setLocation] = useState(false);
   const [currentLocation, setCurrentLocation] = useState({
     latitude: null,
     longitude: null,
   });
 
   useEffect(() => {
-
     if (isFocused) {
       checkLocationPermission();
       // Geolocation.getCurrentPosition(
@@ -71,12 +74,11 @@ const HomeScreen = ({navigation}) => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         // Permission granted, proceed with getting the location
-        Geolocation.getCurrentPosition(
-          position => {
-            const { latitude, longitude } = position.coords;
-            setLocation({latitude, longitude});
-            // Do something with the latitude and longitude values
-          },);
+        Geolocation.getCurrentPosition(position => {
+          const {latitude, longitude} = position.coords;
+          setLocation({latitude, longitude});
+          // Do something with the latitude and longitude values
+        });
         return true;
       } else {
         return false;
@@ -144,7 +146,7 @@ const HomeScreen = ({navigation}) => {
           justifyContent: 'space-around',
           // backgroundColor: '#fff',
           // borderRadius: 25,
-          marginHorizontal: 20,
+          marginHorizontal: 10,
         }}>
         <GooglePlacesAutocomplete
           placeholder="Where are you going?"
@@ -173,13 +175,10 @@ const HomeScreen = ({navigation}) => {
             container: {
               flex: 1,
               borderRadius: 30,
-              
             },
             textInputContainer: {
               // flexDirection: 'row',
               // borderRadius: 30,
-              
-              
             },
             textInput: {
               backgroundColor: '#FFFFFF',
@@ -188,18 +187,17 @@ const HomeScreen = ({navigation}) => {
               paddingHorizontal: 20,
               flex: 1,
               color: '#000',
-              margin:0,
+              margin: 0,
               shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 2,
               },
-              shadowOpacity: 0.75,
-              shadowRadius: 5,
-              elevation: 5,
-              borderColor:'lightgrey',
-              borderWidth:1
-              
+              // shadowOpacity: 0.75,
+              // shadowRadius: 5,
+              // elevation: 5,
+              borderColor: 'lightgrey',
+              borderWidth: 1,
             },
             poweredContainer: {
               justifyContent: 'flex-end',
@@ -208,13 +206,13 @@ const HomeScreen = ({navigation}) => {
               borderBottomLeftRadius: 5,
               borderColor: '#c8c7cc',
               borderTopWidth: 0.5,
-              backgroundColor:'#000'
+              backgroundColor: '#000',
             },
             powered: {},
             listView: {
-              backgroundColor:'#fff',
+              backgroundColor: '#fff',
               overflow: 'scroll',
-              height:300,
+              height: 300,
             },
             row: {
               backgroundColor: '#FFFFFF',
@@ -228,7 +226,7 @@ const HomeScreen = ({navigation}) => {
               backgroundColor: '#c8c7cc',
             },
             description: {
-              color:"#000"
+              color: '#000',
             },
             loader: {
               flexDirection: 'row',
@@ -257,13 +255,19 @@ const HomeScreen = ({navigation}) => {
     const handleDateConfirm = date => {
       setStartOpen(false);
       setStartDateTime(date);
-      const updatedStartDateTime = moment(date).add(2, 'hours').toISOString();
-      dispatch(setStartTime(updatedStartDateTime));
+      // const updatedStartDateTime = moment(date).add(2, 'hours').toISOString();
+      dispatch(setStartTime(date.toISOString()));
     };
 
     return (
       <View style={{width: wp('100%')}}>
-        <Text style={{color: '#fff', fontSize: 16, fontWeight: 'bold'}}>
+        <Text
+          style={{
+            // color: '#fff',
+            fontSize: 14,
+            marginBottom: 6,
+            // fontWeight: 'bold'
+          }}>
           Parking from
         </Text>
         <TouchableOpacity
@@ -273,8 +277,9 @@ const HomeScreen = ({navigation}) => {
             style={{
               textAlign: 'center',
               textAlignVertical: 'center',
-              fontSize: 18,
-              marginTop: 10,
+              fontSize: 12,
+              marginTop: 12,
+              // justifySelf: 'center',
             }}>
             {new Date(startDateTime).toLocaleString([], {
               year: 'numeric',
@@ -299,18 +304,24 @@ const HomeScreen = ({navigation}) => {
   };
 
   const endDateTimePicker = () => {
-    const [endDateTime, setendDateTime] = useState(new Date());
-
     const handleDateConfirm = date => {
+      console.log(`end time ${date}`);
       setendOpen(false);
       setendDateTime(date);
-      const updatedEndDateTime = moment(date).add(2, 'hours').toISOString();
-      dispatch(setEndTime(updatedEndDateTime));
+      console.log(` iso string ${date.toISOString()}`);
+      // const updatedEndDateTime = moment(date).add(2, 'hours').toISOString();
+      dispatch(setEndTime(date.toISOString()));
     };
 
     return (
       <View style={{width: wp('100%')}}>
-        <Text style={{color: '#fff', fontSize: 16, fontWeight: 'bold'}}>
+        <Text
+          style={{
+            // color: '#fff',
+            fontSize: 14,
+            marginBottom: 6,
+            // fontWeight: 'bold'
+          }}>
           Parking until
         </Text>
         <TouchableOpacity style={styles.input} onPress={() => setendOpen(true)}>
@@ -318,10 +329,10 @@ const HomeScreen = ({navigation}) => {
             style={{
               textAlign: 'center',
               textAlignVertical: 'center',
-              fontSize: 18,
-              marginTop: 10,
+              fontSize: 12,
+              marginTop: 12,
             }}>
-            {new Date(endDateTime).toLocaleString([], {
+            {new Date(endDate).toLocaleString([], {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
@@ -332,7 +343,7 @@ const HomeScreen = ({navigation}) => {
           <DatePicker
             modal
             open={endopen}
-            date={endDateTime}
+            date={endDate}
             minimumDate={
               new Date(new Date(startDateTime).getTime() - 1 * 60 * 60 * 1000)
             }
@@ -349,28 +360,28 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {location && <MapView
+      {location && (
+        <MapView
           style={styles.map}
           region={{
-            latitude:location.latitude,
+            latitude: location.latitude,
             longitude: location.longitude,
             latitudeDelta: 0.01,
             longitudeDelta: 0.0121,
           }}>
-            <View>
+          <View>
             <Marker
-            coordinate={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-            }}
-            image={require('../assets/imgs/marker-purple.png')}
-            >
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }}
+              image={require('../assets/imgs/marker-purple.png')}>
               {console.log(location)}
-          </Marker>
-            </View>
-            
-          </MapView>}
-      
+            </Marker>
+          </View>
+        </MapView>
+      )}
+
       {/* <ImageBackground
         source={require('../assets/images/parkingSearch.jpg')}
         style={styles.backgroundImage}
@@ -389,50 +400,51 @@ const HomeScreen = ({navigation}) => {
           advance. Join over 10 million drivers enjoying easy parking.
         </Text>
       </View> */}
-  
+
       <View
         style={{
-          backgroundColor:'#cfcfcf',
-          borderRadius:15,
-          height:220,
-          padding:15,
+          backgroundColor: 'white',
+          borderRadius: 15,
+          height: 220,
+          padding: 15,
           width: '95%',
           top: hp('3%'),
-          marginHorizontal:'3%',
+          marginHorizontal: '3%',
           position: 'absolute',
           zIndex: 1,
         }}>
-          <View style={{
-            position:'absolute',
-            width:'100%',
-            top:'10%',
-            left:'5%',
-            zIndex:10000
+        <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            top: '10%',
+            left: '5%',
+            zIndex: 10000,
           }}>
           {isFocused && GooglePlacesInput()}
-          </View>
+        </View>
         <View style={styles.inputs}>
-        <View>{StartDateTimePicker()}</View>
-        <View>{endDateTimePicker()}</View>
+          <View>{StartDateTimePicker()}</View>
+          <View>{endDateTimePicker()}</View>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            top: hp('20%'),
+            left: '5%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: wp('83%'),
+            marginTop: 10,
+            marginHorizontal: 8,
+          }}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleShowParkingSpaces}>
+            <Text style={styles.buttonText}>Show Parking Spaces</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View
-        style={{
-          position: 'absolute',
-          top: hp('20%'),
-          left:'5%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleShowParkingSpaces}>
-          <Text style={styles.buttonText}>Show Parking Spaces</Text>
-        </TouchableOpacity>
-      </View>
-      </View>
-      
-     
-      {/* </ImageBackground> */}
     </View>
   );
 };
@@ -462,6 +474,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     left: wp('35%'),
+    marginTop: 6,
     // alignItems: 'center',
     // alignSelf:'center',
     // marginBottom: 50,
@@ -482,25 +495,28 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.75,
     shadowRadius: 5,
-    elevation: 5,
-    borderColor:'lightgrey',
-    borderWidth:1
+    // elevation: 5,
+    borderColor: 'lightgrey',
+    borderWidth: 1,
   },
   button: {
     borderRadius: 10,
     backgroundColor: '#851fbf',
     paddingHorizontal: 20,
     paddingVertical: 10,
+    marginTop: 4,
+    width: '100%',
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   markerPurpleImage: {
     width: 45,
     height: 25,
-    resizeMode:'cover'
+    resizeMode: 'cover',
   },
 });
 

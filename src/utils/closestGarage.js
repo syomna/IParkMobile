@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /**
  * Get the nearest garages subject to passed origin coordinates
  * @param {number} originLong The origin longitude (default is 31.2486498)
@@ -7,6 +6,8 @@
  * @returns {Array} Promise with NearestGarages list
  * @author Nader
  */
+
+import axios from 'axios';
 
 export default async function closestGarage(
   originLong = 31.2486498,
@@ -22,23 +23,48 @@ export default async function closestGarage(
     );
     const garages = await response.json();
     const data = await garages;
-    const travelMode = 'driving';
+    // const travelMode = 'driving';
     // console.log(`garages ${garages}`);
 
     const requests = Object.keys(data).map(key => {
       let garage = {id: key, ...data[key]};
 
-      return new Promise(resolve => {
+      return new Promise(async resolve => {
         const destination = {latitude: garage.lat, longitude: garage.lon};
         const distanceInMeters = calculateDistance(origin, destination);
 
         if (distanceInMeters <= distance) {
           console.log(`yes ${garage.id}`);
-          NearestGarages.push({
-            garage: garage,
-            distance: `${distanceInMeters} Meter`,
-          });
+
+          const destLat = garage.lat;
+          const destLon = garage.lon;
+
+          const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${originLati},${originLong}&destinations=${destLat},${destLon}&mode=driving&key=AIzaSyDxE47Kh4gnM9Sh-Nj6vTjFzful_q7lZdY`;
+
+          const ress = await axios.get(apiUrl);
+          console.log(ress);
+          if (ress.data) {
+            // const d = ress.data.rows[0].elements[0].distance.value;
+            const duration = ress.data.rows[0].elements[0].duration.value; // Duration in seconds
+            const durationInMinutes = Math.round(duration / 60); // Duration in minutes
+            console.log(`durationInMinutes ${durationInMinutes}`);
+            NearestGarages.push({
+              garage: garage,
+              distance: `${durationInMinutes} Mins`,
+            });
+            console.log(NearestGarages);
+          }
+          // const originCoordinates = `${originLati},${originLong}`; // Replace with actual origin coordinates
+          // const destinationCoordinates = `${garage.lat},${garage.lon}`;
+          // getDistance(originCoordinates, destinationCoordinates).then(d => {
+          //   console.log(`d ${d}`);
+          // });
+          // NearestGarages.push({
+          //   garage: garage,
+          //   distance: `${distanceInMeters} Meter`,
+          // });
           // console.log(NearestGarages);
+          // });
         }
 
         resolve();
@@ -78,8 +104,90 @@ function calculateDistance(origin, destination) {
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
+
+// async function getDistance(originCoordinates, destinationCoordinates) {
+//   const apiKey = 'AIzaSyDxE47Kh4gnM9Sh-Nj6vTjFzful_q7lZdY';
+//   const units = 'imperial';
+//   const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(
+//     originCoordinates,
+//   )}&destinations=${encodeURIComponent(
+//     destinationCoordinates,
+//   )}&units=${units}&key=${apiKey}`;
+//   console.log(apiUrl);
+
+//   const response = await fetch(apiUrl);
+//   const data = response.json();
+//   const d = data.rows[0].elements[0].distance.value;
+//   return d;
+// }
 /* How to use it */
 
 // closestGarage().then(result => {
 //   console.log(result);
 // });
+
+// export default async function closestGarage(
+//   originLong = 31.2486498,
+//   originLati = 30.0505454,
+//   distance = 500,
+// ) {
+//   const NearestGarages = [];
+//   const origin = {latitude: originLati, longitude: originLong};
+
+//   try {
+//     const response = await fetch(
+//       'https://parking-system-eaece-default-rtdb.firebaseio.com/garage-collection.json',
+//     );
+//     const garages = await response.json();
+//     const data = await garages;
+//     // const travelMode = 'driving';
+//     // console.log(`garages ${garages}`);
+
+//     const requests = Object.keys(data).map(key => {
+//       let garage = {id: key, ...data[key]};
+
+//       return new Promise(resolve => {
+//         const apiKey = 'AIzaSyDxE47Kh4gnM9Sh-Nj6vTjFzful_q7lZdY';
+//         const originCoordinates = `${originLati},${originLong}`; // Replace with actual origin coordinates
+//         const destinationCoordinates = `${garage.lat},${garage.lon}`; // Replace with actual destination coordinates
+//         const units = 'imperial';
+
+//         const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(
+//           originCoordinates,
+//         )}&destinations=${encodeURIComponent(
+//           destinationCoordinates,
+//         )}&units=${units}&key=${apiKey}`;
+
+//         // Make an HTTP request to the API endpoint
+//         fetch(apiUrl)
+//           .then(response => response.json())
+//           .then(data => {
+//             const distanceInMeters = data.rows[0].elements[0].distance.value;
+//             console.log(`Distance: ${distanceInMeters} meters`);
+//             if (distanceInMeters <= distance) {
+//               console.log(`yes ${garage.id}`);
+//               NearestGarages.push({
+//                 garage: garage,
+//                 distance: `${distanceInMeters} Meter`,
+//               });
+//               console.log(NearestGarages);
+//             }
+//           })
+//           .catch(error => {
+//             console.error(error);
+//           });
+
+//         resolve();
+//       });
+//     });
+
+//     await Promise.all(requests);
+//   } catch (error) {
+//     // console.log(error);
+//   }
+
+//   NearestGarages.map(garage => {
+//     console.log(`return ${garage.garage.id} ${garage.garage.lat}`);
+//   });
+//   return NearestGarages;
+// }

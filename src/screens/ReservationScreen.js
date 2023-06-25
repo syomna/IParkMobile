@@ -71,6 +71,8 @@ export default function ReservationScreen() {
           finalPrice={kCalculatePrice(duration, garage.pricePerHour, 5)}
           isLogged={id ? true : false}
           uid={id}
+          garageId={garage.id}
+          availableSpots={garage.availableSpots}
         />
       </View>
     </StripeProvider>

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import {
   Dimensions,
@@ -132,13 +133,16 @@ const GaragDetails = React.forwardRef(({id}, ref) => {
                 paddingVertical: 5,
               }}>
               <Text style={{fontWeight: '600', color: '#000'}}>
-                {kCalculatePrice(duration, garage[0].garage.pricePerHour , 5)}
+                EGP{' '}
+                {kCalculatePrice(duration, garage[0].garage.pricePerHour, 5)}
               </Text>
               <Text>Parking fee</Text>
             </View>
             <View style={{flex: 1, alignItems: 'center', paddingVertical: 5}}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{fontWeight: '600', color: '#000'}}>2 mins</Text>
+                <Text style={{fontWeight: '600', color: '#000'}}>
+                  {garage[0].distance}
+                </Text>
               </View>
               <Text>To destination</Text>
             </View>
@@ -154,9 +158,7 @@ const GaragDetails = React.forwardRef(({id}, ref) => {
           <Tab.Item titleStyle={{color: '#AA23B6'}}>How to park</Tab.Item>
         </Tab>
         <View style={index === 0 ? {height: 380} : styles.d_none}>
-          <Text style={styles.description}>
-            {garage[0].garage['description']}
-          </Text>
+          <Text style={styles.description}>{garage[0].garage.description}</Text>
           <View
             style={{
               display: 'flex',

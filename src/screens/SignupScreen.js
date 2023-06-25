@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Image,
   Text,
   TextInput,
   TouchableOpacity,
@@ -25,6 +26,7 @@ export default function SignupScreen() {
   const [phone, setPhone] = useState('');
   const [plate, setPlate] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [nameError, setNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [plateError, setPlateError] = useState('');
@@ -132,6 +134,36 @@ export default function SignupScreen() {
         autoCapitalize="none"
       />
       {emailError ? <Text style={AuthStyle.error}>{emailError}</Text> : null}
+      <View style={AuthStyle.inputContainer}>
+        <TextInput
+          // eslint-disable-next-line react-native/no-inline-styles
+          style={[AuthStyle.input, {flex: 2}]}
+          placeholder="Password"
+          onChangeText={handlePasswordChange}
+          value={password}
+          secureTextEntry={!passwordVisible}
+          autoCapitalize="none"
+        />
+
+        <TouchableOpacity
+          onPress={() => {
+            setPasswordVisible(!passwordVisible);
+          }}>
+          <View style={AuthStyle.imageContainer}>
+            <Image
+              source={
+                passwordVisible
+                  ? require('../assets/icons/hidden.png')
+                  : require('../assets/icons/eye.png')
+              }
+              style={AuthStyle.image}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+      {passwordError ? (
+        <Text style={AuthStyle.error}>{passwordError}</Text>
+      ) : null}
       <TextInput
         style={AuthStyle.input}
         placeholder="phone number"
@@ -152,17 +184,6 @@ export default function SignupScreen() {
       />
       {plateError ? <Text style={AuthStyle.error}>{plateError}</Text> : null}
 
-      <TextInput
-        style={AuthStyle.input}
-        placeholder="Password"
-        onChangeText={handlePasswordChange}
-        value={password}
-        secureTextEntry={true}
-        autoCapitalize="none"
-      />
-      {passwordError ? (
-        <Text style={AuthStyle.error}>{passwordError}</Text>
-      ) : null}
       <Text
         style={AuthStyle.back}
         onPress={() => {

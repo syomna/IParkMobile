@@ -6,7 +6,6 @@ export const AuthStyle = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: mainSpace,
-    paddingVertical: mainSpace,
     backgroundColor: 'white',
   },
   title: {
@@ -48,5 +47,16 @@ export const AuthStyle = StyleSheet.create({
     bottom: mainSpace,
     left: mainSpace,
     textDecorationLine: 'underline',
+  },
+  inputContainer: {
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  image: {
+    position: 'absolute',
+    right: 10,
+    width: 20,
+    height: 20,
   },
 });
