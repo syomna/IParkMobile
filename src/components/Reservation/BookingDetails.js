@@ -10,6 +10,7 @@ import {fetchPaymentSheetParams} from '../../services/reservationServices';
 import {kRoutes} from '../../utils/routes';
 import {useDispatch} from 'react-redux';
 import {reserveGarage} from '../../redux/slices/ReservationSlice';
+import Toast from 'react-native-toast-message';
 
 export default function BookingDetails({
   title,
@@ -22,7 +23,10 @@ export default function BookingDetails({
   finalPrice,
   isLogged,
   uid,
+  availableSpots,
+  garageId,
 }) {
+  console.log(`garageId ${garageId} availableSpots ${availableSpots}`);
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [isDialogVisible, setDialogVisible] = useState(false);
   const navigate = useNavigation();
@@ -58,6 +62,21 @@ export default function BookingDetails({
 
   const hideDialog = () => {
     setDialogVisible(false);
+  };
+
+  const showToastSuccess = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Congrats! 🎉',
+      // text2: "you've logged in successfully!",
+      visibilityTime: 1500,
+      onHide: () => {
+        navigate.reset({
+          index: 0,
+          routes: [{name: kRoutes.home}],
+        });
+      },
+    });
   };
 
   return (
@@ -106,11 +125,8 @@ export default function BookingDetails({
               initializePaymentSheet().then(() => {
                 if (!loading) {
                   presentPaymentSheet().then(() => {
-                    dispatch(reserveGarage(0, uid, 20));
-                    navigate.reset({
-                      index: 0,
-                      routes: [{name: kRoutes.home}],
-                    });
+                    dispatch(reserveGarage({garageId, uid, availableSpots}));
+                    showToastSuccess();
                   });
                 }
               });
@@ -175,11 +191,8 @@ export default function BookingDetails({
                 underlayColor="#d1d1d1"
                 onPress={() => {
                   hideDialog();
-                  dispatch(reserveGarage(0, uid, 20));
-                  navigate.reset({
-                    index: 0,
-                    routes: [{name: kRoutes.home}],
-                  });
+                  dispatch(reserveGarage({garageId, uid, availableSpots}));
+                  showToastSuccess();
                 }}>
                 <Text style={ReservationStyle.dialogButtonText}>Confirm</Text>
               </TouchableOpacity>

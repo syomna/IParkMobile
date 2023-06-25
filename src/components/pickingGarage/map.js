@@ -1,6 +1,7 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, {useCallback, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import {useDispatch, useSelector} from 'react-redux';
 import closestGarage from '../../utils/closestGarage';
@@ -15,27 +16,31 @@ import { kFormatDate } from '../../utils/Constants';
 const Map = () => {
   const dispatch = useDispatch();
   const {data} = useSelector(state => state.garageSpaces);
-  const {geocode , startTime, endTime , duration} = useSelector(state => state.dateGeocode);
+  const { geocode, startTime, endTime } = useSelector(state => state.dateGeocode);
+  let lat = geocode.latitude ?? 30.0505454;
+  let lon = geocode.longitude ?? 31.2486498;
   const ref = useRef(null);
   const [id, setID] = useState('');
-  const handleMarkerPress = useCallback(id => {
-    ref?.current?.scrollTo(-740);
-    setID(id);
+  const handleMarkerPress = useCallback(idd => {
+    ref?.current?.scrollTo(-730);
+    setID(idd);
   }, []);
   React.useEffect(() => {
     try {
-      closestGarage().then(res => {
+      closestGarage(lon , lat).then(res => {
         dispatch(getNearbyGarageSpaces(res));
       });
     } catch (error) {
       console.log('Error fetching nearest garages:', error);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (data.length <= 0) {
+  if (data == null) {
     return (
-      <View>
-        <Text>Loading ....</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Loading...</Text>
       </View>
     );
   }
@@ -45,15 +50,15 @@ const Map = () => {
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: 30.0505454,
-            longitude: 31.2486498,
+            latitude: lat,
+            longitude: lon,
             latitudeDelta: 0.01,
             longitudeDelta: 0.0121,
           }}>
           <Marker
             coordinate={{
-              latitude: 30.0505454,
-              longitude: 31.2486498,
+              latitude: lat,
+              longitude: lon,
             }}>
             <Image
               source={require('../../assets/imgs/marker-purple.png')}
@@ -85,7 +90,7 @@ const Map = () => {
           })}
         </MapView>
         <View style={styles.infoBox}>
-            <Text style={styles.infoText}>{geocode.address}</Text>
+          <Text style={styles.infoText}>{geocode.address}</Text>
           <View style={styles.line} />
           <View style={styles.timeBox}>
             <Text style={styles.time}>{kFormatDate(startTime)}</Text>
@@ -93,6 +98,13 @@ const Map = () => {
             <Text style={styles.time}>{kFormatDate(endTime)}</Text>
           </View>
         </View>
+        {data.length < 1 && (
+          <View style={styles.noSpacesConatiner}>
+            <Text style={{textAlign: 'center', fontWeight: 'bold'}}>
+              No available parking spaces
+            </Text>
+          </View>
+        )}
         <GaragDetails ref={ref} id={id} />
       </View>
     </GestureHandlerRootView>
@@ -107,6 +119,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  noSpacesConatiner: {
+    position: 'absolute',
+    bottom: '50%',
+    height: 50,
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    borderWidth: 0.3,
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -175,7 +200,7 @@ const styles = StyleSheet.create({
     height: '400px',
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "start"
-  }
+    flexDirection: 'row',
+    justifyContent: 'start',
+  },
 });

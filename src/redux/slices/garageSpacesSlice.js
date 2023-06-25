@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const garageSpacesSlice = createSlice({
     name: 'garageSpaces',
     initialState: {
-        data: [],
+        data: null,
     },
     reducers:{
         getNearbyGarageSpaces: (state, {payload}) => {

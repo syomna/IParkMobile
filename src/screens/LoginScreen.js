@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import {AuthStyle} from '../styles/AuthStyle';
 import {useState} from 'react';
@@ -19,6 +20,7 @@ export const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const {isLoading, error, id} = useSelector(state => state.authSlice);
   const navigate = useNavigation();
   const dispatch = useDispatch();
@@ -65,11 +67,9 @@ export const LoginScreen = () => {
   const handleLoginPress = () => {
     let eError = validateEmail(email);
     setEmailError(eError);
-    let pError = validatePassword(email);
+    let pError = validatePassword(password);
     setPasswordError(pError);
-
     if (!emailError && !passwordError && email && password) {
-      console.log(`email ${email} password ${password}`);
       dispatch(login({email, password}));
     }
   };
@@ -86,15 +86,32 @@ export const LoginScreen = () => {
         autoCapitalize="none"
       />
       {emailError ? <Text style={AuthStyle.error}>{emailError}</Text> : null}
-
-      <TextInput
-        style={AuthStyle.input}
-        placeholder="Password"
-        onChangeText={handlePasswordChange}
-        value={password}
-        secureTextEntry={true}
-        autoCapitalize="none"
-      />
+      <View style={AuthStyle.inputContainer}>
+        <TextInput
+          // eslint-disable-next-line react-native/no-inline-styles
+          style={[AuthStyle.input, {flex: 2}]}
+          placeholder="Password"
+          onChangeText={handlePasswordChange}
+          value={password}
+          secureTextEntry={!passwordVisible}
+          autoCapitalize="none"
+        />
+        <TouchableOpacity
+          onPress={() => {
+            setPasswordVisible(!passwordVisible);
+          }}>
+          <View style={AuthStyle.imageContainer}>
+            <Image
+              source={
+                passwordVisible
+                  ? require('../assets/icons/hidden.png')
+                  : require('../assets/icons/eye.png')
+              }
+              style={AuthStyle.image}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
       {passwordError ? (
         <Text style={AuthStyle.error}>{passwordError}</Text>
       ) : null}

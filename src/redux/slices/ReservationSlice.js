@@ -5,20 +5,22 @@ export const reserveGarage = createAsyncThunk(
   'reservation/reserve',
   async ({garageId, uid, availableSpots}) => {
     try {
-      // const uid = "lWiGmixRQQNmfC3LsnBsBBQjDhD2";
+      console.log(`${garageId} ${uid} ${availableSpots}`);
 
       if (availableSpots && garageId) {
         console.log(`availableSpots ${availableSpots}`);
         const body = {availableSpots: availableSpots - 1};
 
         // const url = `https://parking-system-eaece-default-rtdb.firebaseio.com/Garages/0.json`;
-        const url = `${FirebaseCollections.baseURL}/${FirebaseCollections.garagesCollection}/${garageId}.json`;
+        const url = `${FirebaseCollections.baseURL}/garage-collection/${garageId}.json`;
+        console.log(`garage url ${url}`);
         await axios.patch(url, body);
         console.log('done garage');
       }
 
       if (uid && garageId) {
         const url = `${FirebaseCollections.baseURL}/${FirebaseCollections.userCollection}`;
+        console.log(`user url ${url}`);
         const res = await axios.get(url);
         const data = res.data;
         console.log(data);

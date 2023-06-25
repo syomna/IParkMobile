@@ -39,18 +39,21 @@ export const signupAndCreateUser = async ({
   const res = await auth().createUserWithEmailAndPassword(email, password);
   const uid = res.user.uid;
   console.log(`uid ${uid}`);
-  await axios.post(
-    `${FirebaseCollections.baseURL}/${FirebaseCollections.userCollection}.json`,
-    {
-      ownerId: uid,
-      garageOwner: false,
-      ownerName: name,
-      ownerEmail: email,
-      password: password,
-      phone: phone,
-      plate: plate,
-    },
+  const body = {
+    ownerId: uid,
+    garageOwner: false,
+    ownerName: name,
+    ownerEmail: email,
+    password: password,
+    rePassword: password,
+    ownerPhone: phone,
+    plate: plate,
+  };
+  const response = await axios.post(
+    `${FirebaseCollections.baseURL}/${FirebaseCollections.userCollection}`,
+    body,
   );
+  console.log(`response ${response}`);
   await AsyncStorage.setItem('uid', uid);
 };
 
