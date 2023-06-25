@@ -1,29 +1,4 @@
-import {Alert, PermissionsAndroid} from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
-import Permissions from 'react-native-permissions';
-
-async function checkLocationPermission() {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'Location Permission',
-        message: 'This app needs access to your location.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      // Permission granted, proceed with getting the location
-      return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    console.error('Location Permission Error:', error);
-  }
-}
+/* eslint-disable prettier/prettier */
 /**
  * Get the nearest garages subject to passed origin coordinates
  * @param {number} originLong The origin longitude (default is 31.2486498)

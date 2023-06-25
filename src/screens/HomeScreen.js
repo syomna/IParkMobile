@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-shadow */
 
 import {React, useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert, Image} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import moment from 'moment';
@@ -18,7 +19,11 @@ import {
   setDuration,
 } from '../redux/slices/dateGeocodeSlice';
 import {useIsFocused} from '@react-navigation/native';
-
+import checkLocationPermission from '../utils/closestGarage'
+import { PermissionsAndroid} from 'react-native';
+// import Geolocation from 'react-native-geolocation-service';
+import Permissions from 'react-native-permissions';
+import MapView, { Marker } from 'react-native-maps';
 const HomeScreen = ({navigation}) => {
   const startDateTime = useSelector(state => state.dateGeocode.startTime);
   const endDateTime = useSelector(state => state.dateGeocode.endTime);
@@ -26,28 +31,60 @@ const HomeScreen = ({navigation}) => {
   const [endopen, setendOpen] = useState(false);
   const [locationChosen, setLocationChosen] = useState(false);
   const isFocused = useIsFocused();
+  // const { geocode } = useSelector(state=>state.dateGeocode)
+  const [location, setLocation] = useState(false)
   const [currentLocation, setCurrentLocation] = useState({
     latitude: null,
     longitude: null,
   });
 
   useEffect(() => {
+
     if (isFocused) {
-      Geolocation.getCurrentPosition(
-        position => {
-          setCurrentLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        error => {
-          console.log('Error getting current location:', error);
-        },
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-      );
+      checkLocationPermission();
+      // Geolocation.getCurrentPosition(
+      //   position => {
+      //     setCurrentLocation({
+      //       latitude: position.coords.latitude,
+      //       longitude: position.coords.longitude,
+      //     });
+      //   },
+      //   error => {
+      //     console.log('Error getting current location:', error);
+      //   },
+      //   {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      // );
     }
   }, [isFocused]);
 
+  async function checkLocationPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Permission',
+          message: 'This app needs access to your location.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        // Permission granted, proceed with getting the location
+        Geolocation.getCurrentPosition(
+          position => {
+            const { latitude, longitude } = position.coords;
+            setLocation({latitude, longitude});
+            // Do something with the latitude and longitude values
+          },);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error('Location Permission Error:', error);
+    }
+  }
   const dispatch = useDispatch();
 
   const handleShowParkingSpaces = () => {
@@ -120,6 +157,7 @@ const HomeScreen = ({navigation}) => {
               longitude: details.geometry.location.lng,
             };
             dispatch(setGeocode(geocode));
+            setLocation(geocode);
             setLocationChosen(true); // Update locationChosen to true
           }}
           query={{
@@ -135,10 +173,13 @@ const HomeScreen = ({navigation}) => {
             container: {
               flex: 1,
               borderRadius: 30,
+              
             },
             textInputContainer: {
-              flexDirection: 'row',
+              // flexDirection: 'row',
               // borderRadius: 30,
+              
+              
             },
             textInput: {
               backgroundColor: '#FFFFFF',
@@ -146,6 +187,19 @@ const HomeScreen = ({navigation}) => {
               borderRadius: 30,
               paddingHorizontal: 20,
               flex: 1,
+              color: '#000',
+              margin:0,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.75,
+              shadowRadius: 5,
+              elevation: 5,
+              borderColor:'lightgrey',
+              borderWidth:1
+              
             },
             poweredContainer: {
               justifyContent: 'flex-end',
@@ -154,9 +208,14 @@ const HomeScreen = ({navigation}) => {
               borderBottomLeftRadius: 5,
               borderColor: '#c8c7cc',
               borderTopWidth: 0.5,
+              backgroundColor:'#000'
             },
             powered: {},
-            listView: {},
+            listView: {
+              backgroundColor:'#fff',
+              overflow: 'scroll',
+              height:300,
+            },
             row: {
               backgroundColor: '#FFFFFF',
               padding: 13,
@@ -168,7 +227,9 @@ const HomeScreen = ({navigation}) => {
               height: 0.5,
               backgroundColor: '#c8c7cc',
             },
-            description: {},
+            description: {
+              color:"#000"
+            },
             loader: {
               flexDirection: 'row',
               justifyContent: 'flex-end',
@@ -288,6 +349,28 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      {location && <MapView
+          style={styles.map}
+          region={{
+            latitude:location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.0121,
+          }}>
+            <View>
+            <Marker
+            coordinate={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+            }}
+            image={require('../assets/imgs/marker-purple.png')}
+            >
+              {console.log(location)}
+          </Marker>
+            </View>
+            
+          </MapView>}
+      
       {/* <ImageBackground
         source={require('../assets/images/parkingSearch.jpg')}
         style={styles.backgroundImage}
@@ -306,24 +389,37 @@ const HomeScreen = ({navigation}) => {
           advance. Join over 10 million drivers enjoying easy parking.
         </Text>
       </View> */}
-
+  
       <View
         style={{
+          backgroundColor:'#cfcfcf',
+          borderRadius:15,
+          height:220,
+          padding:15,
           width: '95%',
-          top: hp('35%'),
+          top: hp('3%'),
+          marginHorizontal:'3%',
           position: 'absolute',
           zIndex: 1,
         }}>
-        {isFocused && GooglePlacesInput()}
-      </View>
-      <View style={styles.inputs}>
-        {StartDateTimePicker()}
-        {endDateTimePicker()}
+          <View style={{
+            position:'absolute',
+            width:'100%',
+            top:'10%',
+            left:'5%',
+            zIndex:10000
+          }}>
+          {isFocused && GooglePlacesInput()}
+          </View>
+        <View style={styles.inputs}>
+        <View>{StartDateTimePicker()}</View>
+        <View>{endDateTimePicker()}</View>
       </View>
       <View
         style={{
           position: 'absolute',
-          top: hp('60%'),
+          top: hp('20%'),
+          left:'5%',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
@@ -333,6 +429,9 @@ const HomeScreen = ({navigation}) => {
           <Text style={styles.buttonText}>Show Parking Spaces</Text>
         </TouchableOpacity>
       </View>
+      </View>
+      
+     
       {/* </ImageBackground> */}
     </View>
   );
@@ -342,14 +441,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  backgroundImage: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  overlay: {
+  map: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    flex: 1,
   },
   header: {
     fontSize: 26,
@@ -364,35 +458,49 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   inputs: {
-    // flexDirection: 'row',
+    flexDirection: 'row',
     justifyContent: 'space-around',
-    // width: '100%',
-    left: wp('2.75%'),
+    width: '100%',
+    left: wp('35%'),
     // alignItems: 'center',
     // alignSelf:'center',
     // marginBottom: 50,
     position: 'absolute',
-    top: hp('48%'),
+    top: hp('10%'),
   },
   input: {
-    width: '95%',
+    width: '40%',
     height: 45,
     backgroundColor: 'white',
     borderRadius: 5,
     marginBottom: 10,
     paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.75,
+    shadowRadius: 5,
+    elevation: 5,
+    borderColor:'lightgrey',
+    borderWidth:1
   },
   button: {
     borderRadius: 10,
     backgroundColor: '#851fbf',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    top: 100,
   },
   buttonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  markerPurpleImage: {
+    width: 45,
+    height: 25,
+    resizeMode:'cover'
   },
 });
 

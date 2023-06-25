@@ -219,7 +219,7 @@ const GaragDetails = React.forwardRef(({id}, ref) => {
           onPress={() => {
             const garageObj = garage[0].garage;
             const price = kCalculatePrice(
-              {days: 0, hours: 4, minutes: 0},
+              duration,
               garage[0].garage.pricePerHour,
             );
             dispatch(getSelectedGarage({garageObj, price}));
