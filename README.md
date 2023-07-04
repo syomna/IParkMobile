@@ -7,7 +7,7 @@ IPark Mobile is a mobile application that provides parking solutions for users. 
 
 -   React Native: A JavaScript framework for building native mobile applications.
 -   Firebase: A platform for creating web and mobile applications that offers real-time data storage and authentication.
--   Google Cloud: Provides access to Google Maps and Google Places API for location-based services and also Google Matrix Distance API to calculate distance between 2 points.
+-   Google Cloud: Provides access to Google Maps and Google Places API for location-based services and also Google Matrix Distance API to calculate distances and travel times between locations.
 -   Stripe: A payment processing platform used to implement payment functionality.
 
 ## Getting Started
@@ -73,6 +73,5 @@ We would like to acknowledge the following resources that helped us develop IPar
 
 -   React Native documentation: [https://reactnative.dev/](https://reactnative.dev/)
 -   Firebase documentation: [https://firebase.google.com/docs](https://firebase.google.com/docs)
+-   Google Cloud documentation: [https://cloud.google.com/](https://cloud.google.com/)
 -   Stripe documentation: [https://stripe.com/docs](https://stripe.com/docs)
-
-Feel free to customize this README file based on your specific project requirements. Best of luck with your IPark Mobile app!
