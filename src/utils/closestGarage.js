@@ -39,7 +39,7 @@ export default async function closestGarage(
           const destLat = garage.lat;
           const destLon = garage.lon;
 
-          const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${originLati},${originLong}&destinations=${destLat},${destLon}&mode=driving&key=AIzaSyDxE47Kh4gnM9Sh-Nj6vTjFzful_q7lZdY`;
+          const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${originLati},${originLong}&destinations=${destLat},${destLon}&mode=driving&key=AIzaSyA-7gy8MHZetTF4Yo6HOdLMqeUXuhX38rI`;
 
           const ress = await axios.get(apiUrl);
           console.log(ress);
@@ -48,10 +48,12 @@ export default async function closestGarage(
             const duration = ress.data.rows[0].elements[0].duration.value; // Duration in seconds
             const durationInMinutes = Math.round(duration / 60); // Duration in minutes
             console.log(`durationInMinutes ${durationInMinutes}`);
-            NearestGarages.push({
-              garage: garage,
-              distance: `${durationInMinutes} Mins`,
-            });
+            if (garage.approved) {
+              NearestGarages.push({
+                garage: garage,
+                distance: `${durationInMinutes} Mins`,
+              });
+            }
             console.log(NearestGarages);
           }
           // const originCoordinates = `${originLati},${originLong}`; // Replace with actual origin coordinates

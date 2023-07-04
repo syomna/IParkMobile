@@ -42,6 +42,7 @@ export const signupAndCreateUser = async ({
   const body = {
     ownerId: uid,
     garageOwner: false,
+    CarOwner: true,
     ownerName: name,
     ownerEmail: email,
     password: password,

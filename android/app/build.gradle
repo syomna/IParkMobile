@@ -120,6 +120,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+    //     release {
+    //   storeFile file('/Users/yomna/upload-keystore.jks')
+    //   storePassword '0144830133'
+    //   keyAlias 'upload'
+    //   keyPassword '0144830133'
+    // }
     }
     buildTypes {
         debug {

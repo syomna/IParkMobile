@@ -79,6 +79,7 @@ export default function BookingDetails({
     });
   };
 
+  // if (loading) {}
   return (
     <View style={ReservationStyle.container}>
       <ScrollView>
