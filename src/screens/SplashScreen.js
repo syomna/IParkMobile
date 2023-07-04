@@ -8,17 +8,14 @@ export default function SplashScreen() {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      navigation.navigate(kRoutes.home);
+      navigation.replace(kRoutes.home);
     }, 1500);
 
     return () => clearTimeout(timeout);
   }, [navigation]);
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require('../assets/images/logo.png')}
-      />
+      <Image style={styles.image} source={require('../assets/imgs/logo.png')} />
       <Text style={styles.title}>IPark</Text>
       <Text style={styles.subtitle}>Your Parking Solution</Text>
     </View>

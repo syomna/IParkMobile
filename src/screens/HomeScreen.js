@@ -163,7 +163,7 @@ const HomeScreen = ({navigation}) => {
             setLocationChosen(true); // Update locationChosen to true
           }}
           query={{
-            key: 'AIzaSyDxE47Kh4gnM9Sh-Nj6vTjFzful_q7lZdY',
+            key: 'AIzaSyA-7gy8MHZetTF4Yo6HOdLMqeUXuhX38rI',
             language: 'en',
             components: 'country:eg',
             location: `${currentLocation.latitude || 0},${
@@ -369,16 +369,14 @@ const HomeScreen = ({navigation}) => {
             latitudeDelta: 0.01,
             longitudeDelta: 0.0121,
           }}>
-          <View>
-            <Marker
-              coordinate={{
-                latitude: location.latitude,
-                longitude: location.longitude,
-              }}
-              image={require('../assets/imgs/marker-purple.png')}>
-              {console.log(location)}
-            </Marker>
-          </View>
+          <Marker
+            coordinate={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+            }}
+            image={require('../assets/imgs/marker-purple.png')}>
+            {console.log(location)}
+          </Marker>
         </MapView>
       )}
 
@@ -405,6 +403,7 @@ const HomeScreen = ({navigation}) => {
         style={{
           backgroundColor: 'white',
           borderRadius: 15,
+          elevation: 10,
           height: 220,
           padding: 15,
           width: '95%',
@@ -412,6 +411,10 @@ const HomeScreen = ({navigation}) => {
           marginHorizontal: '3%',
           position: 'absolute',
           zIndex: 1,
+          shadowColor: '#000',
+          shadowOffset: {width: 0, height: 2},
+          shadowOpacity: 0.75,
+          shadowRadius: 5,
         }}>
         <View
           style={{
@@ -516,7 +519,7 @@ const styles = StyleSheet.create({
   markerPurpleImage: {
     width: 45,
     height: 25,
-    resizeMode: 'cover',
+    // resizeMode: 'cover',
   },
 });
 
